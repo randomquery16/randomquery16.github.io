@@ -1,1 +1,37 @@
-kontol bapak kau pecah
+-- Letakkan script ini sebagai LocalScript di StarterPlayer/StarterCharacterScripts atau tempat lain yang sesuai
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Fungsi untuk memaksa duduk
+local function sitDown()
+    if humanoid.RigType == Enum.HumanoidRigType.R6 then
+        -- Untuk R6 gunakan properti Sit
+        humanoid.Sit = true
+    else
+        -- Untuk R15 gunakan emote atau animasi
+        pcall(function()
+            humanoid:PlayEmote("sit")
+        end)
+        
+        -- Fallback jika emote tidak bekerja
+        if not humanoid:GetStateEnabled(Enum.HumanoidStateType.Seated) then
+            local anim = Instance.new("Animation")
+            anim.AnimationId = "rbxassetid://6158454309" -- ID animasi duduk R15
+            local track = humanoid:LoadAnimation(anim)
+            track:Play()
+        end
+    end
+end
+
+-- Jalankan fungsi duduk
+sitDown()
+
+-- (Opsional) Auto refresh saat karakter respawn
+player.CharacterAdded:Connect(function(newChar)
+    character = newChar
+    humanoid = character:WaitForChild("Humanoid")
+    sitDown()
+end)
