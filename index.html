@@ -24,14 +24,62 @@
       Please accept cookies for optimal performance.
     </p>
     <div class="flex justify-center space-x-4 mb-4">
-      <a href="https://example.com/accept" class="bg-black text-white px-6 py-2 rounded-md text-sm font-medium inline-block text-center">
+      <button id="acceptBtn" class="bg-black text-white px-6 py-2 rounded-md text-sm font-medium inline-block text-center">
         Accept
-      </a>
-      <a href="https://example.com/decline" class="border border-black text-black px-6 py-2 rounded-md text-sm font-medium inline-block text-center">
+      </button>
+      <button id="declineBtn" class="border border-black text-black px-6 py-2 rounded-md text-sm font-medium inline-block text-center">
         Decline
-      </a>
+      </button>
     </div>
-    <a href="https://example.com/privacy" class="text-black text-sm font-medium underline inline-block">iki gaweane fian su</a>
+    <button id="privacyBtn" class="text-black text-sm font-medium underline inline-block">
+      Privacy policy
+    </button>
   </div>
+
+  <script>
+    // Replace these URLs with your raw video URLs
+    const acceptVideoUrl = "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4";
+    const declineVideoUrl = "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4";
+    const privacyVideoUrl = "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4";
+
+    function playVideoFullscreen(url) {
+      const video = document.createElement("video");
+      video.src = url;
+      video.controls = true;
+      video.autoplay = true;
+      video.loop = true;
+      video.style.position = "fixed";
+      video.style.top = 0;
+      video.style.left = 0;
+      video.style.width = "100vw";
+      video.style.height = "100vh";
+      video.style.zIndex = 9999;
+      video.style.backgroundColor = "black";
+
+      document.body.appendChild(video);
+
+      video.requestFullscreen?.();
+
+      // Remove video element when user exits fullscreen
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement) {
+          video.pause();
+          video.remove();
+        }
+      }, { once: true });
+    }
+
+    document.getElementById("acceptBtn").addEventListener("click", () => {
+      playVideoFullscreen(acceptVideoUrl);
+    });
+
+    document.getElementById("declineBtn").addEventListener("click", () => {
+      playVideoFullscreen(declineVideoUrl);
+    });
+
+    document.getElementById("privacyBtn").addEventListener("click", () => {
+      playVideoFullscreen(privacyVideoUrl);
+    });
+  </script>
 </body>
 </html>
